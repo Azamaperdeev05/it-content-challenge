@@ -131,8 +131,8 @@ export const Reel01GammaComponent: React.FC<{ hasAudio?: boolean }> = ({ hasAudi
         }}
       >
         <span style={{ width: "12px", height: "12px", borderRadius: "50%", backgroundColor: "#a855f7" }} />
-        <span style={{ fontSize: "28px", fontWeight: "800", letterSpacing: "1.5px", color: "#f1f5f9" }}>
-          AI ЛАЙФХАКТАР • СЛАЙД
+        <span style={{ fontSize: "24px", fontWeight: "800", letterSpacing: "1.5px", color: "#f1f5f9", whiteSpace: "nowrap" }}>
+          A.PERDEEV • AI ЛАЙФХАКТАР
         </span>
       </div>
 
@@ -547,7 +547,7 @@ export const Reel01GammaComponent: React.FC<{ hasAudio?: boolean }> = ({ hasAudi
           letterSpacing: "1.5px",
         }}
       >
-        @AI_QAZAQSHA
+        @a.perdeev
       </div>
     </AbsoluteFill>
   );

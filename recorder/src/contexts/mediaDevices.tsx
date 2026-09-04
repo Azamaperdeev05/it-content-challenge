@@ -35,11 +35,11 @@ export const MediaDevicesProvider = ({
 }: MediaDevicesProviderProps) => {
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
   const [cameraId, setCameraId] = useState('');
-  const [cameraEnabled, _setCameraEnabled] = useState(false);
+  const [cameraEnabled, _setCameraEnabled] = useState(true);
 
   const [microphones, setMicrophones] = useState<MediaDeviceInfo[]>([]);
   const [microphoneId, setMicrophoneId] = useState('');
-  const [microphoneEnabled, _setMicrophoneEnabled] = useState(false);
+  const [microphoneEnabled, _setMicrophoneEnabled] = useState(true);
 
   const requestCamera = useCamera(cameraId, cameraEnabled);
   const requestMicrophone = useMicrophone(microphoneId, microphoneEnabled);
@@ -54,15 +54,15 @@ export const MediaDevicesProvider = ({
 
       setCameras(cameras);
       setCameraId(cameraId);
-      _setCameraEnabled(preference.cameraEnabled);
+      _setCameraEnabled(true);
 
       setMicrophones(microphones);
       setMicrophoneId(microphoneId);
-      _setMicrophoneEnabled(preference.microphoneEnabled);
+      _setMicrophoneEnabled(true);
 
       await Promise.all([
-        requestCamera(cameraId, preference.cameraEnabled),
-        requestMicrophone(microphoneId, preference.microphoneEnabled),
+        requestCamera(cameraId, true),
+        requestMicrophone(microphoneId, true),
       ]);
     };
 

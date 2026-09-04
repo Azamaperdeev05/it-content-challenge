@@ -31,19 +31,60 @@ export const RecordingProvider = ({ children }: RecordingProviderProps) => {
   const [isPaused, setIsPaused] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [recordingBlob, setRecordingBlob] = useState<Blob | null>(null);
-  const { cameraStream, microphoneStream, screenshareStream } = useStreams();
+  const {
+    cameraStream,
+    microphoneStream,
+    screenshareStream,
+    setCameraStream,
+    setMicrophoneStream,
+  } = useStreams();
 
   const mediaRecorder = useRef<MediaRecorder>();
 
-  const startRecording = () => {
+  const startRecording = async () => {
+    let activeMic = microphoneStream;
+    let activeCam = cameraStream;
+
+    // Automatically ensure active microphone stream exists
+    if (
+      !activeMic ||
+      activeMic.getAudioTracks().length === 0 ||
+      !activeMic.getAudioTracks()[0].enabled
+    ) {
+      try {
+        activeMic = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true,
+          },
+        });
+        setMicrophoneStream(activeMic);
+      } catch (err) {
+        console.warn('Direct microphone capture warning:', err);
+      }
+    }
+
+    // Automatically ensure active camera stream exists if not screenOnly
+    if (!activeCam && layout !== 'screenOnly') {
+      try {
+        activeCam = await navigator.mediaDevices.getUserMedia({
+          video: { width: { ideal: 1920 }, height: { ideal: 1080 } },
+        });
+        setCameraStream(activeCam);
+      } catch (err) {
+        console.warn('Direct camera capture warning:', err);
+      }
+    }
+
     const composedStream = composeStreams(
-      layout === 'screenOnly' ? null : cameraStream,
-      microphoneStream,
+      layout === 'screenOnly' ? null : activeCam,
+      activeMic,
       layout === 'cameraOnly' ? null : screenshareStream,
     );
 
     if (composedStream.getTracks().length === 0) {
-      alert('Камера немесе микрофон табылмады. Алдымен камера мен микрофонды қосыңыз!');
+      alert('Камера немесе микрофон табылмады. Браузер рұқсаттарын тексеріңіз.');
       return;
     }
 

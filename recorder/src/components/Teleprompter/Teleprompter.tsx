@@ -15,6 +15,8 @@ import {
   ExternalLink,
   Camera,
   CameraOff,
+  Mic,
+  MicOff,
 } from 'lucide-react';
 import { useStreams } from 'contexts/streams';
 import { useMediaDevices } from 'contexts/mediaDevices';
@@ -77,8 +79,8 @@ export function Teleprompter({ onClose }: TeleprompterProps) {
   const [countdown, setCountdown] = useState<number | null>(null);
   const [recordSeconds, setRecordSeconds] = useState(0);
 
-  const { cameraStream } = useStreams();
-  const { setCameraEnabled } = useMediaDevices();
+  const { cameraStream, microphoneStream } = useStreams();
+  const { setCameraEnabled, setMicrophoneEnabled } = useMediaDevices();
   const videoSourceRef = useVideoSource(cameraStream);
 
   const scrollControls = useAnimation();
@@ -86,12 +88,15 @@ export function Teleprompter({ onClose }: TeleprompterProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Automatically request camera if not enabled
+  // Automatically request BOTH camera and microphone if not enabled
   useEffect(() => {
     if (!cameraStream) {
       setCameraEnabled(true).catch(console.warn);
     }
-  }, [cameraStream, setCameraEnabled]);
+    if (!microphoneStream) {
+      setMicrophoneEnabled(true).catch(console.warn);
+    }
+  }, [cameraStream, microphoneStream, setCameraEnabled, setMicrophoneEnabled]);
 
   // Track recording elapsed time
   useEffect(() => {
@@ -159,6 +164,9 @@ export function Teleprompter({ onClose }: TeleprompterProps) {
     } else {
       if (!cameraStream) {
         setCameraEnabled(true);
+      }
+      if (!microphoneStream) {
+        setMicrophoneEnabled(true);
       }
       setCountdown(3);
       let count = 3;
@@ -335,6 +343,27 @@ export function Teleprompter({ onClose }: TeleprompterProps) {
           >
             {showCamera ? <Camera className="h-3.5 w-3.5" /> : <CameraOff className="h-3.5 w-3.5" />}
             <span>Камера</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setMicrophoneEnabled(!microphoneStream)}
+            style={{
+              padding: '5px 10px',
+              borderRadius: '6px',
+              fontSize: '11px',
+              fontWeight: '600',
+              background: microphoneStream ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+              border: `1px solid ${microphoneStream ? 'rgba(74, 222, 128, 0.4)' : 'rgba(239, 68, 68, 0.4)'}`,
+              color: microphoneStream ? '#4ade80' : '#f87171',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+            }}
+            title={microphoneStream ? 'Микрофон қосулы (Дыбыс жазылады)' : 'Микрофон өшірулі (Қосу үшін басыңыз)'}
+          >
+            {microphoneStream ? <Mic className="h-3.5 w-3.5" /> : <MicOff className="h-3.5 w-3.5" />}
+            <span>{microphoneStream ? 'Микрофон 🎙️' : 'Микрофон ✕'}</span>
           </button>
           <button
             type="button"

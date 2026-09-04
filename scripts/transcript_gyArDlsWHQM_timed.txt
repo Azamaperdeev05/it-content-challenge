@@ -1,0 +1,347 @@
+[00:00] What an incredible day as OpenAI is
+[00:02] finally releasing GBT6 Astra. It's
+[00:05] officially rolling out and this thing is
+[00:08] an absolute monster already taking the
+[00:10] number one spot across multiple domains.
+[00:13] This isn't just another small upgrade
+[00:14] from OpenAI cuz Astra brings massive
+[00:17] improvements across coding, computer
+[00:20] use, agents, reasoning, and even cyber
+[00:22] security. In fact, OpenAI believes that
+[00:25] this model is so capable that Greg
+[00:27] Brockman is literally calling this the
+[00:30] beginning of the AGI era. And after
+[00:32] seeing what Asher can actually do, I can
+[00:34] understand why. Like I'd mentioned
+[00:38] benchmark-wise, this is where it excels
+[00:40] in almost everything at a substantial
+[00:43] gain. Like on Arc AGI 3, this is where
+[00:46] it has now recorded a 98.6 percentage.
+[00:50] This is a benchmark that was released to
+[00:52] essentially evaluate these newer models
+[00:55] on a harder scale, but this new model
+[00:57] exceptionally kills it, surpassing it
+[01:00] and almost completing this benchmark on
+[01:02] hard bench as well as everything like
+[01:04] terminal bench 4. You can see that there
+[01:07] is substantial gains across all of these
+[01:09] individual benchmarks being cheaper as
+[01:12] well as being better in many of these
+[01:15] different cases. And based on the
+[01:17] results shown, Astro beats GBT 5.6 Soul
+[01:21] across every test listed by a
+[01:23] substantial gain. This is not looking
+[01:25] like a normal model update. It is one of
+[01:28] the biggest model updates that we have
+[01:30] ever seen. Now something else I want to
+[01:32] mention is that when it comes to
+[01:34] computer use, this model also does quite
+[01:36] well in this specific domain because
+[01:39] OpenAI is calling Astra to be the best
+[01:41] computer use model and the benchmarks
+[01:44] definitely back that up. This is where
+[01:46] you can simply tell it to do something
+[01:48] and Astra will actually operate your
+[01:51] computer and it is going to be able to
+[01:53] complete that task whether if it's a
+[01:54] complex task across different
+[01:56] applications. We're talking about
+[01:58] filling out forms, updating CRM, which
+[02:01] is something that they have talked about
+[02:03] within their blog post. It is something
+[02:05] that can do this insanely well,
+[02:07] especially analyzing data information
+[02:10] online, drafting emails. It can do all
+[02:13] of this quite efficiently and quite
+[02:15] fast. And that is one of the selling
+[02:17] points of this model. It is something
+[02:19] that can do this at a pretty great
+[02:21] scale. So, it is going to be something
+[02:24] that most people are going to be using
+[02:25] in a lot of different use cases,
+[02:27] especially when it comes to
+[02:29] productivity. This is something that can
+[02:31] autonomously even install software, test
+[02:34] it for you, troubleshoot problems
+[02:36] directly from what it sees on the
+[02:38] screen, as well as having it so that it
+[02:41] can refine anything that you have within
+[02:43] your complex project. Essentially, we're
+[02:45] getting to a point where AI doesn't just
+[02:48] answer questions or just generate code
+[02:50] nowadays. it is able to actually sit at
+[02:53] a computer and actually do the work that
+[02:55] you give it, which is insane. And that
+[02:58] is a clear sign that we're getting
+[03:00] really, really close to AGI. Most AI
+[03:03] coding tools can build you an app, but
+[03:06] then they still have to figure out
+[03:07] hosting, databases, and deployment.
+[03:10] That's where Abacus AI supercomputer
+[03:13] comes in. It gives you an always on
+[03:16] cloud computer controlled through
+[03:17] natural language. You can deploy agents
+[03:19] like openclaw or Hermes agent and keep
+[03:22] them running 24/7. For example, here
+[03:25] they deployed an open-source large
+[03:27] nuggage model, wrap it with a working
+[03:30] chat interface and it is hosted publicly
+[03:33] all from a single prompt. You can also
+[03:36] run Docker apps, connect databases and
+[03:39] storage or build and host complete
+[03:41] applications like this 3D game. So
+[03:44] instead of managing a VPS, SSL,
+[03:47] databases, and deployment yourself,
+[03:50] Abacus handles the entire stack. Check
+[03:53] out Avacus AI supercomputer through the
+[03:55] links in the description below, and
+[03:57] thanks to them for sponsoring today's
+[03:59] video. Now, when it comes to
+[04:01] availability, the GBT6 Astra is
+[04:03] officially rolling out today, starting
+[04:05] with a limited set of organizations. But
+[04:08] over the next few days, Astro will
+[04:10] become available through ChatG Plus,
+[04:12] Pro, Business, and Enterprise users
+[04:15] alongside access through their Open AI
+[04:17] API as well as AWS. And OpenAI
+[04:21] specifically says that if you want to
+[04:22] experience Astra at its best, you should
+[04:25] be getting the GPT desktop app, which
+[04:28] makes a lot of sense considering how
+[04:30] heavily this model is focused on
+[04:32] computer use and actually taking actions
+[04:34] on your behalf. Also, something very
+[04:37] important to note, this is actually a
+[04:39] pretty expensive model. It is listed at
+[04:41] $10 per 1 million input tokens and $50
+[04:44] per 1 million output tokens. Basically
+[04:46] competing with what the Fable 5.1 is.
+[04:50] That's around 2.5 times more expensive
+[04:52] than GBT 5.6 Soul, which is the current
+[04:55] pricing. But Astra is basically the best
+[04:58] model that you will ever touch. And that
+[05:01] is something that is definitely not an
+[05:03] overstatement. This has massive
+[05:05] improvements in computer use, coding,
+[05:07] agentic task, reasoning, everything that
+[05:10] you can name. Now, this is one of the
+[05:12] craziest things about Astra. This is
+[05:15] where Astra demos are coming from Pico
+[05:17] in this current snippet. And they
+[05:20] essentially gave Astra one basic gray
+[05:22] box cart prototype. And from that, it
+[05:25] created three different completely
+[05:27] themed games in one go. One is a pirate
+[05:30] game, the second is a candy game, and a
+[05:32] cyberpunk game. And apparently most of
+[05:34] them worked on the first try, requiring
+[05:37] around 50% fewer manual fixes compared
+[05:40] to the previous model. But here is the
+[05:42] really impressive part. Astra doesn't
+[05:44] just sprite the code. It can play the
+[05:46] game inside Unity, see what's broken,
+[05:49] and then go back and fix those bugs. So
+[05:52] you're basically watching the model
+[05:54] through this entire loop of building,
+[05:57] playing, finding problems, fixing them,
+[05:59] and testing again. That's a huge step
+[06:02] towards genuinely autonomous game
+[06:04] development, autonomous coding, and just
+[06:07] full autonomy. Now, when it comes to the
+[06:09] world of AI, vibe coding platform, and
+[06:11] benchmark, this is where the new GBT6
+[06:14] Astra is leading all of these different
+[06:16] domains, it excels, topping Fable 5.1,
+[06:20] Fable, Opus, GPT 5.1.6 by a substantial
+[06:24] gain. And if you want to run your own
+[06:26] benchmarks, you can easily do so and get
+[06:28] started for free directly with the links
+[06:30] in the description below, as well as
+[06:31] accessing my prompt library. And
+[06:33] speaking of games, OpenAI also showed
+[06:35] off this GBT6 Astra cart racer demo,
+[06:39] which was created by Pyro. And the crazy
+[06:41] thing here is that Astro can take
+[06:43] relatively simple instructions and turn
+[06:45] them into actual playable games with
+[06:48] detailed graphics, proper movement, and
+[06:50] engaging gameplay. Meaning even someone
+[06:53] with basically no game development can
+[06:56] experience what it feels like to be a
+[06:58] game dev by just simply prompting with
+[07:00] the GBT6 Astra. And this is where it can
+[07:03] create a full-fledged game, which is
+[07:06] something that you can even sell. It's
+[07:07] kind of nuts. Now, the biggest
+[07:09] improvement seems to be browser control
+[07:11] overall from all the demos that I have
+[07:13] seen coding games as well as general
+[07:16] knowledge work. And these are just a
+[07:19] couple of different domains that are
+[07:20] something that are quite prominent with
+[07:22] this model. It's significantly faster in
+[07:24] browser, highly steerable, and can work
+[07:27] autonomously for extended periods. Game
+[07:30] development is especially impressive.
+[07:32] We're talking about extremely close to
+[07:34] true prompted playable games that are
+[07:36] actually fun. And Astra's 3D
+[07:38] understanding is apparently unmatched
+[07:40] with much better spatial awareness and
+[07:43] consistent 3D asset creation. Writing
+[07:46] has also improved too with less of the
+[07:48] typical AI smell. Although it's still
+[07:50] not perfect yet.
+[07:56] There's a lot of stuff in the AI space
+[07:57] that I don't really put on to the
+[07:59] YouTube channel and you can actually
+[08:00] access it through my free newsletter
+[08:02] with the link in the description below
+[08:04] where you can subscribe completely for
+[08:06] free. Now here the GBT6 Astra had done a
+[08:10] pretty remarkable job in creating this
+[08:12] Minecraft clone with shaders and actual
+[08:14] functional components that represent the
+[08:16] actual game with even uh different icons
+[08:20] that depict the different items in the
+[08:22] game. So it takes a further step from
+[08:25] even what the Fable 5.1 had done. They
+[08:27] even created a village. You have
+[08:29] lighting. You have different breaking
+[08:31] block animations. And all of the assets
+[08:34] seem to represent what the original
+[08:36] sandbox game does, as well as just
+[08:39] creating all the small things that you
+[08:40] would see from the original game like
+[08:42] the wheat farm as well as the water
+[08:44] physics. Everything seems to be
+[08:46] thoroughly generated with this specific
+[08:48] prompt. Another really cool example is
+[08:51] where Astra is working directly with
+[08:53] Unity where Astra takes existing assets
+[08:55] and assembles an entire city scene into
+[08:58] an immersive 3D environment based on
+[09:01] what the user wants. Now we're
+[09:03] definitely are seeing a visual
+[09:05] improvement obviously with AI generated
+[09:08] demos, but remember this is being done
+[09:09] inside Unity which is significantly
+[09:12] harder for these models to work with.
+[09:14] And OpenAI has also upgraded the codeex
+[09:17] harness alongside Astra, making computer
+[09:20] use significantly faster. So combined
+[09:23] with Codeex and the new Astra model, it
+[09:26] is something that is able to do many of
+[09:28] these tasks faster obviously in
+[09:30] comparison to GBT 5.6 Soul, but as well
+[09:33] as with other models as well. And that
+[09:35] is definitely one of the bigger stories
+[09:36] here. If you like this video and would
+[09:38] love to support the channel, you can
+[09:40] consider donating to my channel through
+[09:42] the super thanks option below. Or you
+[09:45] can consider joining our private Discord
+[09:47] where you can access multiple
+[09:48] subscriptions to different AI tools for
+[09:50] free on a monthly basis, plus daily AI
+[09:53] news and exclusive content, plus a lot
+[09:56] more. When it comes to SVG, it excels in
+[09:59] this specific domain, surpassing Fable,
+[10:02] Gemini, whatever model that you can
+[10:04] think of. It just beats it outright.
+[10:08] And this might be one of the craziest
+[10:09] things that I have seen Astra do. This
+[10:12] is from Matt Shurmer and he had
+[10:14] essentially have Astra build out an
+[10:17] entire world in Unreal Engine, fill it
+[10:20] out with humans powered by Astra itself
+[10:22] and have those agents work together to
+[10:25] survive. A day later, he had literally
+[10:28] heard voices coming from his living room
+[10:30] and thought that someone was inside his
+[10:32] apartment. But it actually turned out
+[10:34] that Astra was having these agents talk
+[10:37] to each other inside this simulation. So
+[10:40] it actually created a game and created a
+[10:42] simulation inside that game with
+[10:45] functional AI agents working and talking
+[10:47] to each other to create a functional
+[10:50] livable simulation. Obviously, it's not
+[10:52] perfect, but the fact that Astra can
+[10:54] help build a world populated by AI
+[10:56] agents and independently interact and
+[10:59] communicate is absolutely an insane
+[11:02] feat. Here, the GBT6 Astra was put up
+[11:05] against the GPT 5.6 Soul and Fable 5.1
+[11:08] from Enthropic. Astro finished it with
+[11:12] the specific prompt to create a flight
+[11:14] simulator in about 20 and a half minute
+[11:17] using 16.28 28 million tokens at roughly
+[11:21] $28 while GBZ5.6 soul took almost the
+[11:25] same amount of time but costed only I
+[11:28] think $661.
+[11:30] Now, this isn't a perfect applestoapple
+[11:33] benchmark cuz Astra was running on ultra
+[11:36] with six sub agents, but soul was
+[11:39] something that worked alone on high. But
+[11:41] visually, Astra produced an incredibly
+[11:44] generated flight simulator. And when it
+[11:47] was compared directly with the Fable
+[11:49] 5.1, it was something that surpassed it
+[11:52] by a pretty great margin. So the big
+[11:54] takeaway is obviously that Astra can
+[11:56] deliver some seriously impressive
+[11:58] results, but at the moment the extra
+[12:01] capability can come at a significantly
+[12:03] costly price tag. Also, when it comes to
+[12:06] professional work, this is something
+[12:07] that is something that can excel at
+[12:09] spreadsheets. It can create
+[12:11] presentations for you quite well. This
+[12:13] is a reference document that was given
+[12:16] to the Astra model and it was able to
+[12:18] create a really cool looking
+[12:20] presentation based off that reference.
+[12:23] Even with spreadsheets, it's able to
+[12:25] categorize output some really cool
+[12:27] detailed data. It is also something that
+[12:30] does quite well with document styling.
+[12:32] And this is something that I also want
+[12:34] to add on. The model does exceptionally
+[12:36] well with front-end generations and you
+[12:38] will see that with a couple of my demos
+[12:39] that we'll be posting later on. It is
+[12:42] something that excels across every
+[12:44] domain. And I truly mean that. It's not
+[12:47] an overstatement. It is just what this
+[12:50] model is truly capable of. But that's
+[12:52] basically just a gist of what the GBT6
+[12:54] Astra is. I'll leave all the links that
+[12:56] I use in today's video in the
+[12:57] description below. OpenAI has truly
+[13:00] unlocked the door toaining AGI with this
+[13:03] model and I am really really excited to
+[13:06] use this on a day-to-day basis because
+[13:09] this is truly a remarkable new model and
+[13:12] it is something that blows all of the
+[13:14] different models that we have seen out
+[13:16] of the ballpark. But that's basically it
+[13:18] guys. I'll leave all the links that I
+[13:19] use in today's video in the description
+[13:20] below. Make sure you go ahead and take a
+[13:21] look at the world of AI platform and
+[13:23] vibe coding uh benchmark. Make sure you
+[13:25] go ahead and take a look at the second
+[13:27] channel. Join the newsletter, join the
+[13:28] Discord, follow me on Twitter, and
+[13:30] lastly, make sure you guys also take a
+[13:32] look at the school community. Join our
+[13:33] YouTube channel by subscribing, turn on
+[13:35] notification bell, like this video, and
+[13:37] please take a look at our previous
+[13:38] videos so that you can stay up to date
+[13:39] with the latest AD news. But with that
+[13:41] thought, guys, have an amazing day.
+[13:42] Spread positivity, and I'll see you guys
+[13:44] really shortly. He suffers.

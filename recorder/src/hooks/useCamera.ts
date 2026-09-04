@@ -36,7 +36,7 @@ const useCamera = (deviceId: string, enabled: boolean) => {
       if (!enabled) {
         deviceId = '';
       }
-      if (deviceId === deviceIdRef.current) {
+      if (deviceId === deviceIdRef.current && cameraStreamRef.current) {
         return;
       }
       if (isRecordingRef.current && layoutRef.current !== 'screenOnly') {

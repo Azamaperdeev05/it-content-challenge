@@ -31,7 +31,7 @@ const useMicrophone = (deviceId: string, enabled: boolean) => {
       if (!enabled) {
         deviceId = '';
       }
-      if (deviceId === deviceIdRef.current) {
+      if (deviceId === deviceIdRef.current && microphoneStreamRef.current) {
         return;
       }
       if (isRecordingRef.current) {

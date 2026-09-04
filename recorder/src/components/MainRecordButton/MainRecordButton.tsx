@@ -2,36 +2,33 @@ import cx from 'classnames';
 
 import RecordButton from 'components/RecordButton';
 import { useCountdown } from 'contexts/countdown';
-import { useLayout } from 'contexts/layout';
-import { usePictureInPicture } from 'contexts/pictureInPicture';
 import { useRecording } from 'contexts/recording';
-import { useScreenshare } from 'contexts/screenshare';
 
 import styles from './MainRecordButton.module.css';
 
 const MainRecordButton = () => {
   const { countingDown, setCountingDown } = useCountdown();
-  const { layout } = useLayout();
-  const { isRecording } = useRecording();
-  const { pipWindow, requestPipWindow } = usePictureInPicture();
-  const { startScreenshare } = useScreenshare();
+  const { isRecording, startRecording, stopRecording } = useRecording();
 
   return (
     <RecordButton
-      className={cx(styles.root, { [styles.recording]: isRecording })}
+      className={cx(styles.root, {
+        [styles.recording]: isRecording,
+        [styles.countingDown]: countingDown,
+      })}
       classes={{ icon: styles.icon }}
-      onClick={async () => {
+      onClick={() => {
         if (countingDown) {
           return;
         }
         if (isRecording) {
-          pipWindow?.close();
-        } else if (pipWindow) {
-          setCountingDown(true);
-        } else if (layout === 'cameraOnly') {
-          await requestPipWindow();
+          stopRecording();
         } else {
-          await startScreenshare();
+          setCountingDown(true);
+          setTimeout(() => {
+            startRecording();
+            setCountingDown(false);
+          }, 3000);
         }
       }}
     />

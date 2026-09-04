@@ -36,36 +36,59 @@ export const RecordingProvider = ({ children }: RecordingProviderProps) => {
   const mediaRecorder = useRef<MediaRecorder>();
 
   const startRecording = () => {
-    setIsRecording(true);
-
     const composedStream = composeStreams(
       layout === 'screenOnly' ? null : cameraStream,
       microphoneStream,
       layout === 'cameraOnly' ? null : screenshareStream,
     );
-    mediaRecorder.current = new MediaRecorder(composedStream, {
-      mimeType: 'video/webm; codecs=vp9',
+
+    if (composedStream.getTracks().length === 0) {
+      alert('Камера немесе микрофон табылмады. Алдымен камера мен микрофонды қосыңыз!');
+      return;
+    }
+
+    setIsRecording(true);
+    setIsPaused(false);
+
+    const preferredMime = [
+      'video/webm; codecs=vp9,opus',
+      'video/webm; codecs=vp8,opus',
+      'video/webm',
+    ].find((type) => MediaRecorder.isTypeSupported(type)) || '';
+
+    const options: MediaRecorderOptions = {
       videoBitsPerSecond: 8e6,
-    });
+    };
+    if (preferredMime) {
+      options.mimeType = preferredMime;
+    }
+
+    try {
+      mediaRecorder.current = new MediaRecorder(composedStream, options);
+    } catch {
+      mediaRecorder.current = new MediaRecorder(composedStream);
+    }
 
     const chunks: Blob[] = [];
 
     mediaRecorder.current.ondataavailable = (event) => {
-      if (event.data.size > 0) chunks.push(event.data);
+      if (event.data && event.data.size > 0) chunks.push(event.data);
     };
 
     mediaRecorder.current.onstop = () => {
       composedStream
-        .getVideoTracks()
-        .forEach((composedTrack) => composedTrack.stop());
+        .getTracks()
+        .forEach((track) => track.stop());
 
-      const blob = new Blob(chunks);
+      const blob = new Blob(chunks, { type: chunks[0]?.type || 'video/webm' });
 
       setRecordingBlob(blob);
       setIsModalOpen(true);
+      setIsRecording(false);
+      setIsPaused(false);
     };
 
-    mediaRecorder.current.start();
+    mediaRecorder.current.start(1000);
   };
 
   const stopRecording = () => {

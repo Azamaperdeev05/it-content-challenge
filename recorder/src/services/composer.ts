@@ -18,6 +18,24 @@ export const composeStreams = (
   const microphoneTrack = microphoneStream?.getAudioTracks()[0];
   const screenshareTrack = screenshareStream?.getVideoTracks()[0];
 
+  // If camera-only recording (e.g. Teleprompter mode), use native cloned track for zero-latency 100% stability
+  if (cameraTrack && !screenshareTrack) {
+    const tracks: MediaStreamTrack[] = [cameraTrack.clone()];
+    if (microphoneTrack) {
+      tracks.push(microphoneTrack.clone());
+    }
+    return new MediaStream(tracks);
+  }
+
+  // If screenshare-only recording
+  if (screenshareTrack && !cameraTrack) {
+    const tracks: MediaStreamTrack[] = [screenshareTrack.clone()];
+    if (microphoneTrack) {
+      tracks.push(microphoneTrack.clone());
+    }
+    return new MediaStream(tracks);
+  }
+
   const screenshareProcessor =
     screenshareTrack &&
     new MediaStreamTrackProcessor({

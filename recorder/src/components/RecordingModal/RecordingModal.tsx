@@ -1,7 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { FFmpeg } from '@ffmpeg/ffmpeg';
-import { fetchFile, toBlobURL } from '@ffmpeg/util';
-import Button from '@mui/material/Button';
+import { useState } from 'react';
 import styles from './RecordingModal.module.css';
 
 type RecordingModalProps = {
@@ -15,59 +12,8 @@ export const RecordingModal = ({
   onClose,
   recordingBlob,
 }: RecordingModalProps) => {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'converting'>(
-    'idle',
-  );
-  const [progress, setProgress] = useState(0);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'converting'>('idle');
   const [statusMessage, setStatusMessage] = useState('');
-  const ffmpegRef = useRef<FFmpeg>();
-
-  useEffect(() => {
-    const ffmpeg = new FFmpeg();
-    ffmpegRef.current = ffmpeg;
-
-    ffmpeg.on('log', ({ message }) => {
-      console.log('FFmpeg log:', message);
-      if (message.includes('configuration')) {
-        setStatusMessage('Кодекті іске қосу...');
-      }
-    });
-
-    ffmpeg.on('progress', ({ progress }) => {
-      setStatus('converting');
-      const normalizedProgress = Math.abs(progress);
-      const startValue = 2500000;
-      const percentage = Math.min(
-        100,
-        Math.max(
-          0,
-          Math.round(
-            (1 - (startValue - normalizedProgress) / startValue) * 100,
-          ),
-        ),
-      );
-      setProgress(percentage);
-      setStatusMessage(`MP4-ке түрлендірілуде... ${percentage}%`);
-    });
-
-    // Background preload local FFmpeg so there is no network delay
-    (async () => {
-      try {
-        await ffmpeg.load({
-          coreURL: await toBlobURL('/ffmpeg/ffmpeg-core.js', 'text/javascript'),
-          wasmURL: await toBlobURL('/ffmpeg/ffmpeg-core.wasm', 'application/wasm'),
-        });
-        console.log('Local FFmpeg loaded in background!');
-      } catch (e) {
-        console.warn('Background FFmpeg preload warning:', e);
-      }
-    })();
-
-    return () => {
-      ffmpeg.off('log', () => {});
-      ffmpeg.off('progress', () => {});
-    };
-  }, []);
 
   if (!isOpen || !recordingBlob) return null;
 
@@ -82,43 +28,22 @@ export const RecordingModal = ({
   };
 
   const convertToMp4 = async () => {
-    if (!ffmpegRef.current) return;
-
-    setStatus('loading');
-    setStatusMessage('Жергілікті FFmpeg кітапханасы іске қосылуда...');
-    setProgress(0);
-
-    const ffmpeg = ffmpegRef.current;
+    setStatus('converting');
+    setStatusMessage('MacBook аппараттық кодегімен MP4 жасалуда (0.5 сек)...');
 
     try {
-      if (!ffmpeg.loaded) {
-        await ffmpeg.load({
-          coreURL: await toBlobURL('/ffmpeg/ffmpeg-core.js', 'text/javascript'),
-          wasmURL: await toBlobURL('/ffmpeg/ffmpeg-core.wasm', 'application/wasm'),
-        });
+      const response = await fetch('/api/convert-mp4', {
+        method: 'POST',
+        body: recordingBlob,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server returned ${response.status}`);
       }
 
-      setStatusMessage('Видео өңделуге дайындалуда...');
-      await ffmpeg.writeFile('input.webm', await fetchFile(recordingBlob));
-
-      setStatusMessage('Жылдам түрлендірілуде (Ultrafast MP4)...');
-      await ffmpeg.exec([
-        '-i', 'input.webm',
-        '-c:v', 'libx264',
-        '-preset', 'ultrafast',
-        '-crf', '23',
-        '-c:a', 'aac',
-        'output.mp4',
-      ]);
-
-      setStatusMessage('Файл дайын, жүктелуде...');
-      const data = await ffmpeg.readFile('output.mp4');
-
-      const url = URL.createObjectURL(
-        new Blob([data instanceof Uint8Array ? data : new Uint8Array()], {
-          type: 'video/mp4',
-        }),
-      );
+      setStatusMessage('MP4 дайын, жүктелуде...');
+      const mp4Blob = await response.blob();
+      const url = URL.createObjectURL(mp4Blob);
       const link = document.createElement('a');
       link.href = url;
       link.download = `recording_${Date.now()}.mp4`;
@@ -129,11 +54,9 @@ export const RecordingModal = ({
       setStatusMessage('');
       onClose();
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
-      console.error('Error converting video:', errorMessage);
-      setStatusMessage(`Қате: ${errorMessage}`);
-      setStatus('idle');
+      console.error('Server conversion failed, saving as WebM instead:', error);
+      alert('MP4 сервері жауап бермеді, бейне тікелей WebM форматында жүктеледі.');
+      downloadWebm();
     }
   };
 
@@ -186,50 +109,28 @@ export const RecordingModal = ({
 
         {status !== 'idle' ? (
           <div style={{ padding: '1.5rem 0', textAlign: 'center' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '0.75rem', animation: 'spin 1s linear infinite' }}>
-              ⚙️
+            <div style={{ fontSize: '2.2rem', marginBottom: '0.75rem', animation: 'spin 1s linear infinite' }}>
+              ⚡
             </div>
-            <p style={{ margin: '0.5rem 0', color: '#cbd5e1', fontSize: '14px', fontWeight: '500' }}>
+            <p style={{ margin: '0.5rem 0', color: '#cbd5e1', fontSize: '14px', fontWeight: '600' }}>
               {statusMessage}
             </p>
-            {status === 'converting' && (
-              <div
-                style={{
-                  width: '100%',
-                  height: '6px',
-                  backgroundColor: '#334155',
-                  borderRadius: '999px',
-                  overflow: 'hidden',
-                  marginTop: '1.25rem',
-                }}
-              >
-                <div
-                  style={{
-                    width: `${progress}%`,
-                    height: '100%',
-                    backgroundColor: '#3b82f6',
-                    borderRadius: '999px',
-                    transition: 'width 0.3s ease',
-                  }}
-                />
-              </div>
-            )}
           </div>
         ) : (
           <div>
             <p style={{ fontSize: '13px', color: '#94a3b8', lineHeight: '1.5', marginBottom: '1.5rem' }}>
-              Видео сәтті жазылды. Қажетті форматыңызды таңдаңыз:
+              Видео сәтті жазылды. Қажетті форматыңызды таңдап жүктеп алыңыз:
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {/* Instant WebM button */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              {/* Ultra-fast MP4 button */}
               <button
                 type="button"
-                onClick={downloadWebm}
+                onClick={convertToMp4}
                 style={{
-                  padding: '12px 18px',
+                  padding: '14px 18px',
                   borderRadius: '10px',
-                  backgroundColor: '#10b981',
+                  backgroundColor: '#2563eb',
                   color: '#ffffff',
                   border: 'none',
                   fontSize: '14px',
@@ -238,29 +139,26 @@ export const RecordingModal = ({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  boxShadow: '0 4px 14px rgba(16, 185, 129, 0.4)',
+                  boxShadow: '0 4px 14px rgba(37, 99, 235, 0.4)',
                   transition: 'all 0.2s ease',
                 }}
               >
-                <span>⚡ Лезде жүктеу (WebM)</span>
-                <span style={{ fontSize: '11px', opacity: 0.9, backgroundColor: 'rgba(0,0,0,0.2)', padding: '3px 8px', borderRadius: '6px' }}>
-                  0 секунд • Ұсынылады
+                <span>🎬 MP4 ретінде сақтау</span>
+                <span style={{ fontSize: '11px', opacity: 0.9, backgroundColor: 'rgba(0,0,0,0.25)', padding: '3px 8px', borderRadius: '6px' }}>
+                  Apple Silicon • 0.5 сек ⚡
                 </span>
               </button>
-              <div style={{ fontSize: '11px', color: '#64748b', marginTop: '-4px', marginBottom: '6px', paddingLeft: '4px' }}>
-                💡 WebM форматын Telegram, CapCut, Premiere, браузерлер бірден ашады, күтудің мүлдем қажеті жоқ!
-              </div>
 
-              {/* MP4 Fast Convert button */}
+              {/* Instant WebM button */}
               <button
                 type="button"
-                onClick={convertToMp4}
+                onClick={downloadWebm}
                 style={{
                   padding: '12px 18px',
                   borderRadius: '10px',
-                  backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                  color: '#60a5fa',
-                  border: '1px solid rgba(59, 130, 246, 0.4)',
+                  backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                  color: '#34d399',
+                  border: '1px solid rgba(16, 185, 129, 0.4)',
                   fontSize: '14px',
                   fontWeight: '700',
                   cursor: 'pointer',
@@ -270,9 +168,9 @@ export const RecordingModal = ({
                   transition: 'all 0.2s ease',
                 }}
               >
-                <span>🎬 MP4-ке айналдыру</span>
-                <span style={{ fontSize: '11px', opacity: 0.9, backgroundColor: 'rgba(59, 130, 246, 0.15)', padding: '3px 8px', borderRadius: '6px' }}>
-                  Жергілікті FFmpeg
+                <span>⚡ Түпнұсқа WebM жүктеу</span>
+                <span style={{ fontSize: '11px', opacity: 0.9, backgroundColor: 'rgba(16, 185, 129, 0.2)', padding: '3px 8px', borderRadius: '6px' }}>
+                  0 секунд • Лезде
                 </span>
               </button>
             </div>
@@ -282,3 +180,5 @@ export const RecordingModal = ({
     </div>
   );
 };
+
+export default RecordingModal;

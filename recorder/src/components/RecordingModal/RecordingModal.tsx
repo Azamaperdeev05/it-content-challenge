@@ -29,17 +29,14 @@ export const RecordingModal = ({
     ffmpeg.on('log', ({ message }) => {
       console.log('FFmpeg log:', message);
       if (message.includes('configuration')) {
-        setStatusMessage('Initializing encoder...');
+        setStatusMessage('Кодекті іске қосу...');
       }
     });
 
     ffmpeg.on('progress', ({ progress }) => {
-      console.log('FFmpeg progress:', progress);
       setStatus('converting');
-      // Convert negative progress value to percentage (0-100)
-      // Progress goes from large negative to small negative, so we need to normalize
       const normalizedProgress = Math.abs(progress);
-      const startValue = 2500000; // Approximate starting value based on logs
+      const startValue = 2500000;
       const percentage = Math.min(
         100,
         Math.max(
@@ -50,8 +47,21 @@ export const RecordingModal = ({
         ),
       );
       setProgress(percentage);
-      setStatusMessage(`Converting video... ${percentage}%`);
+      setStatusMessage(`MP4-ке түрлендірілуде... ${percentage}%`);
     });
+
+    // Background preload local FFmpeg so there is no network delay
+    (async () => {
+      try {
+        await ffmpeg.load({
+          coreURL: await toBlobURL('/ffmpeg/ffmpeg-core.js', 'text/javascript'),
+          wasmURL: await toBlobURL('/ffmpeg/ffmpeg-core.wasm', 'application/wasm'),
+        });
+        console.log('Local FFmpeg loaded in background!');
+      } catch (e) {
+        console.warn('Background FFmpeg preload warning:', e);
+      }
+    })();
 
     return () => {
       ffmpeg.off('log', () => {});
@@ -65,7 +75,7 @@ export const RecordingModal = ({
     const url = URL.createObjectURL(recordingBlob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'recording.webm';
+    link.download = `recording_${Date.now()}.webm`;
     link.click();
     URL.revokeObjectURL(url);
     onClose();
@@ -75,35 +85,35 @@ export const RecordingModal = ({
     if (!ffmpegRef.current) return;
 
     setStatus('loading');
-    setStatusMessage('Loading FFmpeg libraries...');
+    setStatusMessage('Жергілікті FFmpeg кітапханасы іске қосылуда...');
     setProgress(0);
 
     const ffmpeg = ffmpegRef.current;
 
     try {
-      const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
+      if (!ffmpeg.loaded) {
+        await ffmpeg.load({
+          coreURL: await toBlobURL('/ffmpeg/ffmpeg-core.js', 'text/javascript'),
+          wasmURL: await toBlobURL('/ffmpeg/ffmpeg-core.wasm', 'application/wasm'),
+        });
+      }
 
-      await ffmpeg.load({
-        coreURL: await toBlobURL(
-          `${baseURL}/ffmpeg-core.js`,
-          'text/javascript',
-        ),
-        wasmURL: await toBlobURL(
-          `${baseURL}/ffmpeg-core.wasm`,
-          'application/wasm',
-        ),
-      });
-
-      setStatusMessage('Processing input file...');
+      setStatusMessage('Видео өңделуге дайындалуда...');
       await ffmpeg.writeFile('input.webm', await fetchFile(recordingBlob));
 
-      setStatusMessage('Starting conversion...');
-      await ffmpeg.exec(['-i', 'input.webm', '-c:v', 'libx264', 'output.mp4']);
+      setStatusMessage('Жылдам түрлендірілуде (Ultrafast MP4)...');
+      await ffmpeg.exec([
+        '-i', 'input.webm',
+        '-c:v', 'libx264',
+        '-preset', 'ultrafast',
+        '-crf', '23',
+        '-c:a', 'aac',
+        'output.mp4',
+      ]);
 
-      setStatusMessage('Reading converted file...');
+      setStatusMessage('Файл дайын, жүктелуде...');
       const data = await ffmpeg.readFile('output.mp4');
 
-      // Download the converted file
       const url = URL.createObjectURL(
         new Blob([data instanceof Uint8Array ? data : new Uint8Array()], {
           type: 'video/mp4',
@@ -111,7 +121,7 @@ export const RecordingModal = ({
       );
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'recording.mp4';
+      link.download = `recording_${Date.now()}.mp4`;
       link.click();
       URL.revokeObjectURL(url);
 
@@ -122,7 +132,7 @@ export const RecordingModal = ({
       const errorMessage =
         error instanceof Error ? error.message : String(error);
       console.error('Error converting video:', errorMessage);
-      setStatusMessage(`Error: ${errorMessage}`);
+      setStatusMessage(`Қате: ${errorMessage}`);
       setStatus('idle');
     }
   };
@@ -135,46 +145,70 @@ export const RecordingModal = ({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        backdropFilter: 'blur(8px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 1000,
+        zIndex: 9999,
       }}
     >
       <div
         style={{
-          backgroundColor: 'black',
+          backgroundColor: '#0f172a',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
           padding: '2rem',
-          borderRadius: '8px',
-          maxWidth: '400px',
-          width: '100%',
+          borderRadius: '16px',
+          maxWidth: '460px',
+          width: '90%',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)',
+          color: '#ffffff',
+          fontFamily: 'system-ui, -apple-system, sans-serif',
         }}
       >
-        <h2 style={{ marginTop: 0, marginBottom: '1.5rem' }}>
-          Recording Complete
-        </h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '700', color: '#f8fafc' }}>
+            🎉 Жазба аяқталды!
+          </h2>
+          <button
+            onClick={onClose}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#94a3b8',
+              fontSize: '1.2rem',
+              cursor: 'pointer',
+            }}
+          >
+            ✕
+          </button>
+        </div>
+
         {status !== 'idle' ? (
-          <div>
-            <p style={{ textAlign: 'center', margin: '1rem 0' }}>
+          <div style={{ padding: '1.5rem 0', textAlign: 'center' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.75rem', animation: 'spin 1s linear infinite' }}>
+              ⚙️
+            </div>
+            <p style={{ margin: '0.5rem 0', color: '#cbd5e1', fontSize: '14px', fontWeight: '500' }}>
               {statusMessage}
             </p>
             {status === 'converting' && (
               <div
                 style={{
                   width: '100%',
-                  height: '4px',
-                  backgroundColor: '#eee',
-                  borderRadius: '2px',
+                  height: '6px',
+                  backgroundColor: '#334155',
+                  borderRadius: '999px',
                   overflow: 'hidden',
-                  marginTop: '1rem',
+                  marginTop: '1.25rem',
                 }}
               >
                 <div
                   style={{
                     width: `${progress}%`,
                     height: '100%',
-                    backgroundColor: '#007bff',
+                    backgroundColor: '#3b82f6',
+                    borderRadius: '999px',
                     transition: 'width 0.3s ease',
                   }}
                 />
@@ -182,22 +216,66 @@ export const RecordingModal = ({
             )}
           </div>
         ) : (
-          <div
-            style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}
-          >
-            <Button
-              onClick={convertToMp4}
-              className={styles.convertButton}
+          <div>
+            <p style={{ fontSize: '13px', color: '#94a3b8', lineHeight: '1.5', marginBottom: '1.5rem' }}>
+              Видео сәтті жазылды. Қажетті форматыңызды таңдаңыз:
+            </p>
 
-            >
-              Convert (MP4)
-            </Button>
-            <Button
-              onClick={downloadWebm}
-              className={styles.downloadButton}
-            >
-              Download (WebM)
-            </Button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {/* Instant WebM button */}
+              <button
+                type="button"
+                onClick={downloadWebm}
+                style={{
+                  padding: '12px 18px',
+                  borderRadius: '10px',
+                  backgroundColor: '#10b981',
+                  color: '#ffffff',
+                  border: 'none',
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  boxShadow: '0 4px 14px rgba(16, 185, 129, 0.4)',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                <span>⚡ Лезде жүктеу (WebM)</span>
+                <span style={{ fontSize: '11px', opacity: 0.9, backgroundColor: 'rgba(0,0,0,0.2)', padding: '3px 8px', borderRadius: '6px' }}>
+                  0 секунд • Ұсынылады
+                </span>
+              </button>
+              <div style={{ fontSize: '11px', color: '#64748b', marginTop: '-4px', marginBottom: '6px', paddingLeft: '4px' }}>
+                💡 WebM форматын Telegram, CapCut, Premiere, браузерлер бірден ашады, күтудің мүлдем қажеті жоқ!
+              </div>
+
+              {/* MP4 Fast Convert button */}
+              <button
+                type="button"
+                onClick={convertToMp4}
+                style={{
+                  padding: '12px 18px',
+                  borderRadius: '10px',
+                  backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                  color: '#60a5fa',
+                  border: '1px solid rgba(59, 130, 246, 0.4)',
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                <span>🎬 MP4-ке айналдыру</span>
+                <span style={{ fontSize: '11px', opacity: 0.9, backgroundColor: 'rgba(59, 130, 246, 0.15)', padding: '3px 8px', borderRadius: '6px' }}>
+                  Жергілікті FFmpeg
+                </span>
+              </button>
+            </div>
           </div>
         )}
       </div>

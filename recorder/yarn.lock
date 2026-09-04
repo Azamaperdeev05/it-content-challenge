@@ -849,6 +849,11 @@
   resolved "https://registry.npmjs.org/@eslint/js/-/js-8.44.0.tgz"
   integrity sha512-Ag+9YM4ocKQx9AarydN0KY2j0ErMHNIocPDrVo8zAE44xLTjEtz81OdR68/cydGtk6m6jDb5Za3r2useMzYmSw==
 
+"@ffmpeg/core@^0.12.6":
+  version "0.12.6"
+  resolved "https://registry.npmjs.org/@ffmpeg/core/-/core-0.12.6.tgz"
+  integrity sha512-PrjWBTfGn2WVn9T7wGnzfFwChbqWeZc7tM9vvJZVRadYFUDakfzy7W0LpYC0cvvK0xT82qlBsk38lQhJ/Hps5A==
+
 "@ffmpeg/ffmpeg@^0.12.15":
   version "0.12.15"
   resolved "https://registry.npmjs.org/@ffmpeg/ffmpeg/-/ffmpeg-0.12.15.tgz"

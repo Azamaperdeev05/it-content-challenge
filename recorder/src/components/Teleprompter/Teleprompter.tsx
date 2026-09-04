@@ -26,6 +26,26 @@ import styles from './Teleprompter.module.css';
 
 const DEFAULT_SPEED = 0.35;
 
+const PRESET_POLYGLOT = `Ағылшын тіліндегі мықты кітаптар мен мақалаларды қазақша оқығыңыз келе ме?
+
+Бірақ қазақша аудармасы әлі күнге дейін жоқ па?
+
+Google Translate-ке салсаң — дизайны, кестелері мен суреттері быт-шыт болып бұзылып кетеді.
+
+Бірақ бұның керемет шешімі табылды!
+
+GitHub-та PolyglotPDF деген жаңа AI жоба жарық көрді.
+
+Сіз кез келген көлемді PDF кітапты жүктейсіз — ол әр бетін 1 секундта қазақшаға аударып береді!
+
+Ең бастысы: түпнұсқаның дизайны, қаріптері, суреттері сол күйі сақталады!
+
+Жоба толықтай тегін және Open-Source.
+
+Осы жобаның сілтемесін алу үшін — комментарийге «КІТАП» деп жазыңыз!
+
+Күнделікті пайдалы AI құралдар үшін @a.perdeev парақшасына жазылып қойыңыз!`;
+
 const PRESET_GPT6 = `Жасанды интеллект енді жай ғана сұраққа жауап беретін чат емес!
 
 OpenAI AGI дәуірін ресми түрде бастады.
@@ -67,7 +87,7 @@ interface TeleprompterProps {
 }
 
 export function Teleprompter({ onClose }: TeleprompterProps) {
-  const [text, setText] = useState(PRESET_GAMMA);
+  const [text, setText] = useState(PRESET_POLYGLOT);
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(DEFAULT_SPEED);
   const [showInput, setShowInput] = useState(false);
@@ -292,6 +312,22 @@ export function Teleprompter({ onClose }: TeleprompterProps) {
         }}
       >
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <button
+            type="button"
+            onClick={() => { setText(PRESET_POLYGLOT); resetTeleprompter(); }}
+            style={{
+              padding: '5px 12px',
+              borderRadius: '6px',
+              fontSize: '11px',
+              fontWeight: '700',
+              background: 'rgba(16, 185, 129, 0.35)',
+              border: '1px solid rgba(16, 185, 129, 0.7)',
+              color: '#d1fae5',
+              cursor: 'pointer',
+            }}
+          >
+            📚 PolyglotPDF
+          </button>
           <button
             type="button"
             onClick={() => { setText(PRESET_GPT6); resetTeleprompter(); }}

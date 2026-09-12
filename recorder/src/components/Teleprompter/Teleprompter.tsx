@@ -26,6 +26,24 @@ import styles from './Teleprompter.module.css';
 
 const DEFAULT_SPEED = 0.35;
 
+const PRESET_BANK = `Жалақы түскені кеше ғана сияқты еді...
+
+Бірақ ақшаның қайда құрып кеткенін түсінбей отырсыз ба?
+
+Банктің қарапайым выпискасын ашсаң — түсініксіз сандардан басың қатады.
+
+Сондықтан мен қазақстандықтар үшін арнайы тегін Bank Analyzer құралын жасап шықтым!
+
+Сайтқа кіріп, Kaspi немесе Halyk-тың PDF выпискасын саласыз болды:
+
+Ол тамаққа, таксиге, шопингке қанша кеткенін, 50/30/20 ережесі мен барлық графикті шығарып береді!
+
+Ең бастысы — 100% қауіпсіз, деректер ешқайда кетпейді!
+
+Сайттың сілтемесін алу үшін комментарийге «БАНК» деп жазыңыз!
+
+Пайдалы AI және IT шешімдер үшін @a.perdeev-ке жазылыңыз!`;
+
 const PRESET_POLYGLOT = `Ағылшын тіліндегі мықты кітаптар мен мақалаларды қазақша оқығыңыз келе ме?
 
 Бірақ қазақша аудармасы әлі күнге дейін жоқ па?
@@ -87,7 +105,7 @@ interface TeleprompterProps {
 }
 
 export function Teleprompter({ onClose }: TeleprompterProps) {
-  const [text, setText] = useState(PRESET_POLYGLOT);
+  const [text, setText] = useState(PRESET_BANK);
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(DEFAULT_SPEED);
   const [showInput, setShowInput] = useState(false);
@@ -312,6 +330,22 @@ export function Teleprompter({ onClose }: TeleprompterProps) {
         }}
       >
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <button
+            type="button"
+            onClick={() => { setText(PRESET_BANK); resetTeleprompter(); }}
+            style={{
+              padding: '5px 12px',
+              borderRadius: '6px',
+              fontSize: '11px',
+              fontWeight: '700',
+              background: 'rgba(239, 68, 68, 0.35)',
+              border: '1px solid rgba(239, 68, 68, 0.7)',
+              color: '#fecaca',
+              cursor: 'pointer',
+            }}
+          >
+            💳 Bank Analyzer
+          </button>
           <button
             type="button"
             onClick={() => { setText(PRESET_POLYGLOT); resetTeleprompter(); }}
